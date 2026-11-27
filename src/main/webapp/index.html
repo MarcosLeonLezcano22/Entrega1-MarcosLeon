@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Administra el catálogo de videojuegos de GameVault.">
+    <title>GameVault | Catálogo de videojuegos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="js/app.js" defer></script>
+</head>
+<body>
+    <header class="cabecera">
+        <div class="contenedor cabecera-contenido">
+            <a class="marca" href="index.html" aria-label="GameVault, inicio">
+                <span class="marca-icono" aria-hidden="true">G</span>
+                <span>Game<span class="marca-acento">Vault</span></span>
+            </a>
+            <p class="cabecera-etiqueta">Tu colección, bajo control</p>
+        </div>
+    </header>
+
+    <main class="contenedor contenido-principal">
+        <section class="intro" aria-labelledby="titulo-principal">
+            <p class="sobrelinea">CENTRO DE COLECCIÓN</p>
+            <h1 id="titulo-principal">Catálogo de videojuegos</h1>
+            <p>Explora, organiza y mantén al día tus juegos favoritos.</p>
+        </section>
+
+        <div class="paneles">
+            <section class="panel panel-catalogo" aria-labelledby="titulo-catalogo">
+                <div class="encabezado-panel">
+                    <div>
+                        <p class="sobrelinea">BIBLIOTECA</p>
+                        <h2 id="titulo-catalogo">Todos los videojuegos</h2>
+                    </div>
+                    <button class="boton boton-secundario boton-recargar" id="btn-recargar" type="button">
+                        <span aria-hidden="true">↻</span>
+                        <span>Actualizar</span>
+                    </button>
+                </div>
+
+                <p class="contador" id="contador-videojuegos" aria-live="polite"></p>
+                <p class="aviso aviso-carga" id="estado-carga" role="status" aria-live="polite" hidden>
+                    <span class="indicador-carga" aria-hidden="true"></span>
+                    Cargando...
+                </p>
+                <p class="aviso aviso-error" id="mensaje-catalogo" role="alert" hidden></p>
+                <div class="rejilla-videojuegos" id="lista-videojuegos" aria-live="polite"></div>
+            </section>
+
+            <section class="panel panel-formulario" aria-labelledby="titulo-formulario">
+                <div class="encabezado-panel encabezado-formulario">
+                    <div>
+                        <p class="sobrelinea">GESTIÓN</p>
+                        <h2 id="titulo-formulario">Añadir videojuego</h2>
+                    </div>
+                    <span class="insignia-formulario" aria-hidden="true">＋</span>
+                </div>
+
+                <form id="formulario-videojuego" novalidate>
+                    <div class="campo">
+                        <label for="titulo">Título</label>
+                        <input id="titulo" name="titulo" type="text" maxlength="100" required autocomplete="off"
+                               placeholder="Ej. The Legend of Zelda">
+                    </div>
+
+                    <div class="fila-campos">
+                        <div class="campo">
+                            <label for="anio">Año</label>
+                            <input id="anio" name="anio" type="number" min="1970" required inputmode="numeric"
+                                   placeholder="2024">
+                        </div>
+                        <div class="campo">
+                            <label for="precio">Precio (€)</label>
+                            <input id="precio" name="precio" type="number" min="0" step="0.01" required
+                                   inputmode="decimal" placeholder="59.99">
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <label for="desarrolladora">Desarrolladora</label>
+                        <select id="desarrolladora" name="desarrolladoraId" required>
+                            <option value="">Selecciona una desarrolladora</option>
+                        </select>
+                    </div>
+
+                    <fieldset class="campo campo-generos">
+                        <legend>Géneros</legend>
+                        <div class="rejilla-generos" id="lista-generos">
+                            <p class="texto-secundario">Cargando géneros...</p>
+                        </div>
+                    </fieldset>
+
+                    <p class="aviso aviso-error aviso-formulario" id="mensaje-formulario" role="alert" hidden></p>
+
+                    <div class="acciones-formulario">
+                        <button class="boton boton-principal" id="btn-guardar" type="submit">Guardar videojuego</button>
+                        <button class="boton boton-secundario" id="btn-cancelar" type="button" hidden>
+                            Cancelar edición
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer class="pie-pagina">
+        <div class="contenedor">
+            <p>GameVault <span aria-hidden="true">·</span> Catálogo de videojuegos</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -73,5 +73,16 @@ Crea los servlets REST en el paquete controlador: /api/videojuegos (GET lista, P
 - Junie añadió por su cuenta un test (`ServletApiTest`) que no había pedido en este paso.
 - No pudo ejecutar `mvn test` (Maven no disponible en su entorno); solo pasó `git diff --check`. Compilo y ejecuto los tests desde IntelliJ.
 - El listener es una pieza que yo no había especificado; decisión de diseño de Junie para compartir el pool entre capas.
+  **Cambios manuales míos:** ninguno
+  **Commit:** `feat: servlets REST con manejo centralizado de errores` 
+### Paso 6 – Frontend
+**Prompt:**
+```
+Crea el frontend en src/main/webapp: index.html semántico, css/estilos.css responsive (mobile first) y js/app.js que consuma la API con fetch. Debe permitir listar, crear, editar y borrar videojuegos (elegir desarrolladora en un <select> y géneros con checkboxes). Muestra un indicador de "Cargando...", mensajes de error claros si falla la validación o el servidor, y confirmación antes de borrar. Prohibido mezclar Java o SQL en las vistas.
+```
+**Resultado de Junie:** creó el frontend en `src/main/webapp`: `index.html` semántico con formulario (selector de desarrolladora y casillas de géneros), `css/estilos.css` con diseño mobile-first y accesible, y `js/app.js`, que consume la API con fetch para listar, crear, editar y borrar videojuegos, con indicador de carga, mensajes de error comprensibles y confirmación antes de borrar.
+**Observaciones:**
+- Junie solo pudo comprobar la sintaxis del JS (`node --check`). No se probó contra Tomcat ni la base de datos; la prueba real la haré con Docker Compose.
+- Detectó una clase `src/main/java/org/example/Main.java` (plantilla de IntelliJ, no es de Junie) y la dejó intacta.
   **Cambios manuales míos:** (lo que corrijas tras revisar; si no tocas nada, escribe "ninguno")
-  **Commit:** `feat: servlets REST con manejo centralizado de errores`
+  **Commit:** `feat: frontend HTML/CSS/JS con CRUD de videojuegos` 
