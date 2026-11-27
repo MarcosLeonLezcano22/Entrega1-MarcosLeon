@@ -16,7 +16,7 @@ services:
       retries: 10
       start_period: 30s
     networks:
-      - gamevault
+      - red_interna
 
   app:
     build:
@@ -34,7 +34,8 @@ services:
     ports:
       - "${APP_PORT:-8080}:8080"
     networks:
-      - gamevault
+      - red_interna
+      - red_publica
 
   adminer:
     image: adminer
@@ -44,12 +45,15 @@ services:
     ports:
       - "${ADMINER_PORT:-8081}:8080"
     networks:
-      - gamevault
+      - red_interna
+      - red_publica
 
 volumes:
   db_data:
 
 networks:
-  gamevault:
+  red_interna:
     driver: bridge
     internal: true
+  red_publica:
+    driver: bridge

@@ -106,5 +106,5 @@ Crea un Dockerfile multi-stage (stage 1: maven con eclipse-temurin 17 que compil
 **Observaciones:**
 - Junie no pudo validar con `docker compose config` ni construir las imágenes porque no hay Docker en su entorno. Lo único que contrastó fue el nombre del WAR y las variables de conexión con `pom.xml` y `ConexionBD.java`.
 - La validación real la hago yo levantando el entorno en mi equipo.
-  **Cambios manuales míos:** (lo que corrijas al probarlo; si no tocas nada, escribe "ninguno")
-  **Commit:** `feat: Dockerfile multi-stage, docker-compose y .env.example`
+  **Cambios manuales míos:** La app no arranca con Docke. He añadido allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC a la URL JDBC en ConexionBD
+  **Commit:** `feat: Dockerfile multi-stage, docker-compose y .env.example` 
