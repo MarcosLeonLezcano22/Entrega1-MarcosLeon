@@ -62,4 +62,16 @@ Crea los DTOs (VideojuegoDTO, DesarrolladoraDTO, GeneroDTO) y la capa de servici
 - No pudo ejecutar `mvn test` (Maven no disponible en su entorno). Los ejecuto yo desde IntelliJ.
 - Detectó cambios en `.idea/misc.xml` y `AI_WORKFLOW.md` y los dejó intactos.
   **Cambios manuales míos:** ninguno
-  **Commit:** `feat: DTOs, excepciones y capa de servicio con validaciones`
+  **Commit:** `feat: DTOs, excepciones y capa de servicio con validaciones` 
+### Paso 5 – API REST con Servlets
+**Prompt:**
+```
+Crea los servlets REST en el paquete controlador: /api/videojuegos (GET lista, POST crear), /api/videojuegos/{id} (GET, PUT, DELETE), /api/desarrolladoras (GET, POST) y /api/generos (GET). Solo deben recibir la petición, llamar al servicio y serializar JSON con Gson. Códigos HTTP semánticos: 200, 201, 400 (ValidacionException), 404 (NoEncontradoException), 500 (DaoException). Los errores devuelven JSON {"error": "mensaje"}. Nada de lógica de negocio ni SQL en los servlets.
+```
+**Resultado de Junie:** creó `VideojuegoServlet`, `DesarrolladoraServlet` y `GeneroServlet` con las rutas y operaciones indicadas, y una clase base `ApiServlet` que centraliza la serialización JSON con Gson y traduce las excepciones a códigos HTTP (400 validación, 404 no encontrado, 500 error de datos) con respuestas JSON de error. Añadió `AplicacionListener`, que crea el DataSource al arrancar la app y conecta DAO y servicios.
+**Observaciones:**
+- Junie añadió por su cuenta un test (`ServletApiTest`) que no había pedido en este paso.
+- No pudo ejecutar `mvn test` (Maven no disponible en su entorno); solo pasó `git diff --check`. Compilo y ejecuto los tests desde IntelliJ.
+- El listener es una pieza que yo no había especificado; decisión de diseño de Junie para compartir el pool entre capas.
+  **Cambios manuales míos:** (lo que corrijas tras revisar; si no tocas nada, escribe "ninguno")
+  **Commit:** `feat: servlets REST con manejo centralizado de errores`
