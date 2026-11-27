@@ -30,9 +30,13 @@ Ahora crea solo el pom.xml (dependencias: jakarta.servlet-api provided, mysql-co
 **Resultado de Junie: actualizó pom.xml (Java 17, WAR, Servlet API Jakarta 6 provided, MySQL Connector/J, HikariCP, Gson, JUnit 5, Mockito, H2 en test) y creó las 7 carpetas de com.gamevault. Borró código previo que existía en el proyecto.** 
 **Cambios manuales míos:Ninguno ** 
 **Commit:** (mensaje del commit)
+**Observaciones:**Junie no pudo ejecutar Maven (no está en el PATH); validé el pom.xml desde IntelliJ.
 
-## Errores corregidos a mano
-Junie no pudo ejecutar Maven (no está en el PATH); validé el pom.xml desde IntelliJ.
-
-## Auditoría final
-(Se rellena al terminar con el resultado del prompt de auditoría y lo que corregí)
+### Paso 2 – Base de datos (init.sql)
+**Prompt:**
+```
+Crea db/init.sql para MySQL 8 con estas tablas: desarrolladora(id, nombre, pais), videojuego(id, titulo, anio, precio, desarrolladora_id FK ON DELETE RESTRICT ON UPDATE CASCADE), genero(id, nombre UNIQUE) y videojuego_genero(videojuego_id, genero_id, PK compuesta, ambas FK ON DELETE CASCADE). Incluye DDL (con DROP/CREATE IF NOT EXISTS) y datos de prueba: 4 desarrolladoras, 8 videojuegos, 5 géneros y sus relaciones. Charset utf8mb4.
+```
+**Resultado de Junie:** creó `db/init.sql` para MySQL 8 con las 4 tablas solicitadas (`desarrolladora`, `videojuego`, `genero`, `videojuego_genero`), motor InnoDB y charset utf8mb4, con claves primarias y foráneas (RESTRICT en videojuego→desarrolladora y CASCADE en la tabla intermedia). Elimina las tablas en orden de dependencia y las vuelve a crear con IF NOT EXISTS. Incluye datos de prueba: 4 desarrolladoras, 8 videojuegos, 5 géneros y 16 relaciones videojuego-género.
+**Observaciones:** Junie no pudo ejecutar el script porque no hay cliente MySQL en el entorno, solo lo revisó a mano. Lo validaré al levantar el contenedor con Docker Compose.
+**Cambios manuales míos:** ninguno
