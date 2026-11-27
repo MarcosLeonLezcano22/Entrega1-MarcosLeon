@@ -74,6 +74,14 @@ class ServletApiTest {
 
         assertEquals(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, respuestaDao.estado);
         assertTrue(respuestaDao.cuerpo.toString().contains("\"error\":\"Error de base de datos\""));
+
+        when(servicio.buscarPorId(6)).thenThrow(new IllegalStateException("Fallo inesperado"));
+        when(peticion.getPathInfo()).thenReturn("/6");
+        Respuesta respuestaInesperada = new Respuesta();
+        servlet.doGet(peticion, respuestaInesperada.respuesta());
+
+        assertEquals(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, respuestaInesperada.estado);
+        assertTrue(respuestaInesperada.cuerpo.toString().contains("\"error\":\"Fallo inesperado\""));
     }
 
     @Test

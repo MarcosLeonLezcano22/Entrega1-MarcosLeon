@@ -66,7 +66,7 @@ public class VideojuegoDTO {
     }
 
     public List<GeneroDTO> getGeneros() {
-        return new ArrayList<>(generos);
+        return new ArrayList<>(generos == null ? List.of() : generos);
     }
 
     public void setGeneros(List<GeneroDTO> generos) {

@@ -88,6 +88,22 @@ class DaoJdbcTest {
     }
 
     @Test
+    void errorAlGuardarGenerosEnActualizacionRevierteLosCambios() {
+        Videojuego original = videojuegoDao.crear(crearVideojuego(List.of(new Genero(1, ""))));
+        Videojuego actualizado = new Videojuego(original.getId(), "Juego actualizado", 2025,
+                new BigDecimal("29.99"), original.getDesarrolladoraId(), List.of(new Genero(999, "")));
+
+        assertThrows(DaoException.class, () -> videojuegoDao.actualizar(actualizado));
+
+        Videojuego persistido = videojuegoDao.buscarPorId(original.getId()).orElseThrow();
+        assertEquals("Juego de prueba", persistido.getTitulo());
+        assertEquals(2024, persistido.getAnio());
+        assertEquals(new BigDecimal("19.99"), persistido.getPrecio());
+        assertEquals(original.getDesarrolladoraId(), persistido.getDesarrolladoraId());
+        assertEquals(List.of(1), persistido.getGeneros().stream().map(Genero::getId).toList());
+    }
+
+    @Test
     void daoDeDesarrolladoraYGeneroCompletaOperacionesCrud() {
         Desarrolladora desarrolladora = desarrolladoraDao.listar().get(0);
         desarrolladora.setPais("Japón actualizado");

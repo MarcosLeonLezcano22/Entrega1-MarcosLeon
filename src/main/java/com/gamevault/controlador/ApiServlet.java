@@ -41,6 +41,8 @@ public abstract class ApiServlet extends HttpServlet {
             escribirError(respuesta, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, excepcion.getMessage());
         } catch (JsonSyntaxException excepcion) {
             escribirError(respuesta, HttpServletResponse.SC_BAD_REQUEST, "El cuerpo JSON no es válido");
+        } catch (Exception excepcion) {
+            escribirError(respuesta, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, excepcion.getMessage());
         }
     }
 

@@ -8,6 +8,7 @@ import com.gamevault.excepcion.NoEncontradoException;
 import com.gamevault.excepcion.ValidacionException;
 import com.gamevault.modelo.Desarrolladora;
 import com.gamevault.modelo.Videojuego;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -98,10 +99,41 @@ class ServicioTest {
     }
 
     @Test
+    void crearConGenerosNulosLosTrataComoListaVacia() {
+        String json = "{\"titulo\":\"Juego\",\"anio\":" + Year.now().getValue()
+                + ",\"precio\":19.99,\"desarrolladoraId\":3,\"generos\":null}";
+        VideojuegoDTO videojuego = new Gson().fromJson(json, VideojuegoDTO.class);
+        when(desarrolladoraDao.buscarPorId(3)).thenReturn(Optional.of(new Desarrolladora(3, "Estudio", "País")));
+        when(videojuegoDao.crear(org.mockito.ArgumentMatchers.any(Videojuego.class)))
+                .thenAnswer(invocacion -> invocacion.getArgument(0));
+
+        VideojuegoDTO resultado = videojuegoServicio.crear(videojuego);
+
+        assertEquals(List.of(), resultado.getGeneros());
+        verify(videojuegoDao).crear(org.mockito.ArgumentMatchers.argThat(entidad -> entidad.getGeneros().isEmpty()));
+    }
+
+    @Test
     void buscarVideojuegoInexistenteLanzaNoEncontrado() {
         when(videojuegoDao.buscarPorId(99)).thenReturn(Optional.empty());
 
         assertThrows(NoEncontradoException.class, () -> videojuegoServicio.buscarPorId(99));
+    }
+
+    @Test
+    void actualizarVideojuegoInexistenteLanzaNoEncontrado() {
+        when(videojuegoDao.buscarPorId(99)).thenReturn(Optional.empty());
+
+        assertThrows(NoEncontradoException.class,
+                () -> videojuegoServicio.actualizar(new VideojuegoDTO(99, "Juego", 1970, BigDecimal.ZERO, 3,
+                        List.of())));
+    }
+
+    @Test
+    void eliminarVideojuegoInexistenteLanzaNoEncontrado() {
+        when(videojuegoDao.eliminar(99)).thenReturn(false);
+
+        assertThrows(NoEncontradoException.class, () -> videojuegoServicio.eliminar(99));
     }
 
     @Test

@@ -108,3 +108,13 @@ Crea un Dockerfile multi-stage (stage 1: maven con eclipse-temurin 17 que compil
 - La validación real la hago yo levantando el entorno en mi equipo.
   **Cambios manuales míos:** La app no arranca con Docke. He añadido allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC a la URL JDBC en ConexionBD
   **Commit:** `feat: Dockerfile multi-stage, docker-compose y .env.example` 
+### Paso 9 – Documentación (README)
+**Prompt:**
+```
+Genera el README.md profesional: descripción, diagrama entidad-relación (Mermaid), esquema de arquitectura de contenedores (Mermaid), explicación de variables de entorno, pasos para copiar .env.example a .env y ejecutar docker compose up --build -d, puertos, credenciales de prueba, cómo ejecutar los tests y un manual breve de uso.
+```
+**Resultado de Junie:** creó `README.md` en español con diagramas Mermaid (arquitectura por capas, modelo entidad-relación y servicios/redes de Docker), explicación de las variables del `.env` y de las credenciales de desarrollo, puertos expuestos, datos de prueba, comandos de Docker Compose, endpoints REST, instrucciones para ejecutar los tests y un manual de uso de la interfaz.
+**Observaciones:**
+- Junie contrastó el contenido con `docker-compose.yml`, `.env.example`, `db/init.sql`, los servlets, la interfaz y la estructura de tests.
+- No ejecutó tests porque el cambio es solo documental.
+  **Commit:** `docs: README con arquitectura, modelo de datos y guía de despliegue`
