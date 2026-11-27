@@ -50,4 +50,16 @@ Crea: (1) la clase config.ConexionBD que cree un DataSource HikariCP leyendo las
 - Junie añadió por su cuenta un test (`DaoJdbcTest`, con H2) que yo no había pedido en este paso.
 - No pudo ejecutar `mvn test`: en su entorno no hay Maven y solo hay Java 11, y el proyecto requiere Java 17. Los tests los ejecuto yo desde IntelliJ con JDK 17.
   **Cambios manuales míos:** He tenidoque cambiar el SDK del 25 al 17
-  **Commit:** `feat: conexión HikariCP, modelo y capa DAO JDBC`
+  **Commit:** `feat: conexión HikariCP, modelo y capa DAO JDBC` 
+### Paso 4 – DTOs y capa de servicio
+**Prompt:**
+```
+Crea los DTOs (VideojuegoDTO, DesarrolladoraDTO, GeneroDTO) y la capa de servicio con sus interfaces. El servicio convierte entidad<->DTO y aplica reglas de negocio: título obligatorio y máximo 100 caracteres, año entre 1970 y el año actual, precio >= 0, la desarrolladora debe existir, no se puede borrar una desarrolladora con videojuegos. Lanza ValidacionException (datos inválidos), NoEncontradoException (id inexistente) y DaoException.
+```
+**Resultado de Junie:** creó `VideojuegoDTO`, `DesarrolladoraDTO` y `GeneroDTO`, las excepciones `ValidacionException` y `NoEncontradoException`, y las interfaces con sus implementaciones de servicio (`VideojuegoServicioImpl`, `DesarrolladoraServicioImpl`, `GeneroServicioImpl`). Los servicios convierten DTO↔entidad, aplican las reglas de validación y lanzan error si el registro no existe. El servicio de desarrolladoras impide borrar las que tengan videojuegos asociados.
+**Observaciones:**
+- Junie añadió por su cuenta tests unitarios (`ServicioTest`) que no había pedido en este paso.
+- No pudo ejecutar `mvn test` (Maven no disponible en su entorno). Los ejecuto yo desde IntelliJ.
+- Detectó cambios en `.idea/misc.xml` y `AI_WORKFLOW.md` y los dejó intactos.
+  **Cambios manuales míos:** ninguno
+  **Commit:** `feat: DTOs, excepciones y capa de servicio con validaciones`
