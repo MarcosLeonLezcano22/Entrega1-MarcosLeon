@@ -152,4 +152,6 @@ Corrige dos hallazgos de la auditoría sin tocar nada más. (1) Si VideojuegoDTO
 - No pudo ejecutar `mvn test` (Maven no disponible en su entorno); los ejecuté yo desde IntelliJ.
 
 **Cambios manuales míos:** ninguno.
-**Commit:** `fix: manejar generos null y ampliar tests de casos límite`
+**Commit:** `fix: manejar generos null y ampliar tests de casos límite` 
+
+ENLACE AL GITHUB:https://github.com/MarcosLeonLezcano22/Entrega1-MarcosLeon
