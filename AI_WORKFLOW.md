@@ -84,5 +84,16 @@ Crea el frontend en src/main/webapp: index.html semántico, css/estilos.css resp
 **Observaciones:**
 - Junie solo pudo comprobar la sintaxis del JS (`node --check`). No se probó contra Tomcat ni la base de datos; la prueba real la haré con Docker Compose.
 - Detectó una clase `src/main/java/org/example/Main.java` (plantilla de IntelliJ, no es de Junie) y la dejó intacta.
-  **Cambios manuales míos:** (lo que corrijas tras revisar; si no tocas nada, escribe "ninguno")
+  **Cambios manuales míos:** ninguno
   **Commit:** `feat: frontend HTML/CSS/JS con CRUD de videojuegos` 
+### Paso 7 – Batería de tests
+**Prompt:**
+```
+Crea tests con JUnit 5: (1) tests de integración del VideojuegoDAO contra H2 en modo MySQL (crear el esquema en @BeforeEach) cubriendo crear, leer, actualizar, borrar, buscar un id inexistente, y violación de integridad (desarrolladora inexistente); (2) tests unitarios del VideojuegoServicio con Mockito cubriendo el camino feliz y los casos límite: título vacío, año fuera de rango, precio negativo, desarrolladora inexistente, id no encontrado.
+```
+**Resultado de Junie:** en vez de crear tests nuevos, amplió los existentes. En `DaoJdbcTest` (H2 en modo MySQL) añadió comprobaciones de persistencia de datos, búsqueda de un ID inexistente y rechazo de una desarrolladora inválida sin que se persista nada. En `ServicioTest` (Mockito) separó los casos de año fuera de rango y precio negativo, y mantiene los de camino feliz, título vacío, desarrolladora inexistente e ID no encontrado.
+**Observaciones:**
+- Los cambios son pequeños (+19 y +9 líneas) porque ya había una base de tests de los pasos anteriores.
+- No pudo ejecutar `mvn test` (Maven no disponible en su entorno). Ejecuto los tests yo desde IntelliJ.
+  **Cambios manuales míos:** ninguno
+  **Commit:** `test: ampliar cobertura de DAO y servicio con casos límite`

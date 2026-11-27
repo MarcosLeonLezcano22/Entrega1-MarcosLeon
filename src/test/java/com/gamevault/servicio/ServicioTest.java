@@ -52,11 +52,19 @@ class ServicioTest {
     }
 
     @Test
-    void rechazaAnioFueraDelRangoYPrecioNegativo() {
+    void rechazaAnioAnteriorAlMinimo() {
         assertThrows(ValidacionException.class,
                 () -> videojuegoServicio.crear(crearVideojuego("Juego", 1969, BigDecimal.ZERO)));
+    }
+
+    @Test
+    void rechazaAnioPosteriorAlActual() {
         assertThrows(ValidacionException.class,
                 () -> videojuegoServicio.crear(crearVideojuego("Juego", Year.now().getValue() + 1, BigDecimal.ZERO)));
+    }
+
+    @Test
+    void rechazaPrecioNegativo() {
         assertThrows(ValidacionException.class,
                 () -> videojuegoServicio.crear(crearVideojuego("Juego", 1970, new BigDecimal("-0.01"))));
     }

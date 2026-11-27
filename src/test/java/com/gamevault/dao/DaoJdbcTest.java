@@ -43,6 +43,10 @@ class DaoJdbcTest {
         Videojuego videojuego = videojuegoDao.crear(crearVideojuego(List.of(new Genero(1, ""), new Genero(2, ""))));
 
         Videojuego encontrado = videojuegoDao.buscarPorId(videojuego.getId()).orElseThrow();
+        assertEquals("Juego de prueba", encontrado.getTitulo());
+        assertEquals(2024, encontrado.getAnio());
+        assertEquals(new BigDecimal("19.99"), encontrado.getPrecio());
+        assertEquals(1, encontrado.getDesarrolladoraId());
         assertEquals(List.of(1, 2), encontrado.getGeneros().stream().map(Genero::getId).toList());
         assertEquals(1, videojuegoDao.listar().size());
 
@@ -58,6 +62,21 @@ class DaoJdbcTest {
 
         assertTrue(videojuegoDao.eliminar(videojuego.getId()));
         assertTrue(videojuegoDao.buscarPorId(videojuego.getId()).isEmpty());
+    }
+
+    @Test
+    void buscarIdInexistenteDevuelveResultadoVacio() {
+        assertTrue(videojuegoDao.buscarPorId(999).isEmpty());
+    }
+
+    @Test
+    void crearConDesarrolladoraInexistenteLanzaErrorDeIntegridadYNoPersiste() {
+        Videojuego videojuego = new Videojuego(0, "Juego sin desarrolladora", 2024,
+                new BigDecimal("19.99"), 999, List.of());
+
+        assertThrows(DaoException.class, () -> videojuegoDao.crear(videojuego));
+
+        assertTrue(videojuegoDao.listar().isEmpty());
     }
 
     @Test
