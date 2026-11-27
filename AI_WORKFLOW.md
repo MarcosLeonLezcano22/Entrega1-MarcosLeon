@@ -40,3 +40,14 @@ Crea db/init.sql para MySQL 8 con estas tablas: desarrolladora(id, nombre, pais)
 **Resultado de Junie:** creó `db/init.sql` para MySQL 8 con las 4 tablas solicitadas (`desarrolladora`, `videojuego`, `genero`, `videojuego_genero`), motor InnoDB y charset utf8mb4, con claves primarias y foráneas (RESTRICT en videojuego→desarrolladora y CASCADE en la tabla intermedia). Elimina las tablas en orden de dependencia y las vuelve a crear con IF NOT EXISTS. Incluye datos de prueba: 4 desarrolladoras, 8 videojuegos, 5 géneros y 16 relaciones videojuego-género.
 **Observaciones:** Junie no pudo ejecutar el script porque no hay cliente MySQL en el entorno, solo lo revisó a mano. Lo validaré al levantar el contenedor con Docker Compose.
 **Cambios manuales míos:** ninguno
+### Paso 3 – Configuración, modelo y capa DAO
+**Prompt:**
+```
+Crea: (1) la clase config.ConexionBD que cree un DataSource HikariCP leyendo las variables de entorno DB_HOST, DB_PORT, DB_NAME, DB_USER y DB_PASSWORD, fallando con un mensaje claro si falta alguna; (2) las entidades del paquete modelo; (3) las interfaces y las implementaciones JDBC del paquete dao para Videojuego, Desarrolladora y Genero con CRUD completo (el DAO de Videojuego debe guardar y leer también sus géneros en la tabla intermedia usando una transacción). Usa PreparedStatement, try-with-resources y lanza una excepción propia DaoException (paquete excepcion) en vez de devolver null o imprimir trazas. El DAO debe recibir el DataSource por constructor para poder testearlo.
+```
+**Resultado de Junie:** creó `ConexionBD` (pool HikariCP que lee DB_HOST, DB_PORT, DB_NAME, DB_USER y DB_PASSWORD de variables de entorno y falla indicando cuál falta), las entidades `Videojuego`, `Desarrolladora` y `Genero`, la excepción `DaoException`, las interfaces DAO y sus implementaciones JDBC con PreparedStatement y recursos cerrados. El DAO de videojuegos guarda, actualiza y lee los géneros dentro de transacciones (clase auxiliar `TransaccionesJdbc`).
+**Observaciones:**
+- Junie añadió por su cuenta un test (`DaoJdbcTest`, con H2) que yo no había pedido en este paso.
+- No pudo ejecutar `mvn test`: en su entorno no hay Maven y solo hay Java 11, y el proyecto requiere Java 17. Los tests los ejecuto yo desde IntelliJ con JDK 17.
+  **Cambios manuales míos:** He tenidoque cambiar el SDK del 25 al 17
+  **Commit:** `feat: conexión HikariCP, modelo y capa DAO JDBC`
