@@ -117,4 +117,39 @@ Genera el README.md profesional: descripción, diagrama entidad-relación (Merma
 **Observaciones:**
 - Junie contrastó el contenido con `docker-compose.yml`, `.env.example`, `db/init.sql`, los servlets, la interfaz y la estructura de tests.
 - No ejecutó tests porque el cambio es solo documental.
-  **Commit:** `docs: README con arquitectura, modelo de datos y guía de despliegue`
+  **Commit:** `docs: README con arquitectura, modelo de datos y guía de despliegue` 
+### Paso 10 – Auditoría final
+**Prompt:**
+```
+Audita el proyecto completo, SIN MODIFICAR NINGÚN ARCHIVO: busca SQL concatenado, recursos sin cerrar, credenciales en código, lógica de negocio en los servlets, entidades expuestas sin DTO y casos de test que falten. Devuélveme solo una lista de problemas ordenada por gravedad, indicando archivo y línea.
+```
+**Hallazgos de Junie:**
+1. **Alta (solo si se despliega fuera de desarrollo local):** la API permite crear, actualizar y borrar videojuegos sin autenticación, y Compose publica la aplicación y Adminer en puertos del host. Los valores de ejemplo de `.env.example` tampoco deben usarse en un despliegue expuesto.
+2. **Media:** un POST o PUT con `"generos": null` hace que `VideojuegoDTO.getGeneros()` lance `NullPointerException`, y `ApiServlet` no la captura, por lo que no se garantiza la respuesta JSON de error prevista.
+3. **Baja (cobertura incompleta):** faltan pruebas del servicio para actualizar y eliminar con ID inexistente, y falta probar el rollback si la actualización de un videojuego falla al guardar sus géneros.
+4. **Baja (escalabilidad):** para comprobar si una desarrolladora tiene videojuegos, el servicio carga todos los videojuegos y el DAO consulta los géneros por separado para cada uno.
+
+**Decisiones mías:**
+- **Corregido (2 y 3):** el hallazgo 2 es un fallo real que devolvía un error sin controlar, y el 3 mejora la cobertura de casos límite. Se corrigen en el Paso 11.
+- **No corregido (1):** la autenticación queda fuera del alcance de la práctica, que se ejecuta en local. Se documenta como limitación conocida en el README.
+- **No corregido (4):** es un problema de escalabilidad que no afecta al volumen de datos de la práctica. Se documenta como mejora futura en el README.
+
+**Observaciones:** comprobé en GitHub Desktop que Junie no modificó ningún archivo durante la auditoría.
+**Commit:** `docs: registro de la auditoría final con Junie`
+
+### Paso 11 – Correcciones tras la auditoría
+**Prompt:**
+```
+Corrige dos hallazgos de la auditoría sin tocar nada más. (1) Si VideojuegoDTO recibe "generos": null en un POST o PUT, no debe lanzar NullPointerException: trata null como lista vacía o lanza ValidacionException, y haz que ApiServlet capture cualquier excepción inesperada y responda 500 con JSON {"error": "mensaje"}. (2) Añade tests: en ServicioTest, actualizar y eliminar un videojuego con ID inexistente deben lanzar NoEncontradoException, y un POST con generos null debe dar el resultado definido; en DaoJdbcTest, un test que compruebe el rollback cuando la actualización de un videojuego falla al guardar sus géneros (por ejemplo, con un id de género inexistente) y que los datos originales no cambian.
+```
+**Resultado de Junie:**
+- `VideojuegoDTO` devuelve una lista vacía si `generos` es `null`, incluso cuando Gson asigna el valor directamente.
+- `ApiServlet` responde 500 con JSON de error para excepciones inesperadas, conservando el manejo específico de los errores conocidos (400 y 404).
+- Añadió tests en `ServicioTest`, `DaoJdbcTest` y `ServletApiTest`: creación con géneros nulos, actualización y eliminación con ID inexistente, error inesperado en la API y rollback íntegro al fallar la actualización de géneros.
+
+**Observaciones:**
+- Entre las dos opciones que le di para el caso `null` (lista vacía o `ValidacionException`), Junie eligió tratarlo como lista vacía.
+- No pudo ejecutar `mvn test` (Maven no disponible en su entorno); los ejecuté yo desde IntelliJ.
+
+**Cambios manuales míos:** ninguno.
+**Commit:** `fix: manejar generos null y ampliar tests de casos límite`
