@@ -96,4 +96,15 @@ Crea tests con JUnit 5: (1) tests de integración del VideojuegoDAO contra H2 en
 - Los cambios son pequeños (+19 y +9 líneas) porque ya había una base de tests de los pasos anteriores.
 - No pudo ejecutar `mvn test` (Maven no disponible en su entorno). Ejecuto los tests yo desde IntelliJ.
   **Cambios manuales míos:** ninguno
-  **Commit:** `test: ampliar cobertura de DAO y servicio con casos límite`
+  **Commit:** `test: ampliar cobertura de DAO y servicio con casos límite` 
+### Paso 8 – Docker y Docker Compose
+**Prompt:**
+```
+Crea un Dockerfile multi-stage (stage 1: maven con eclipse-temurin 17 que compila el .war; stage 2: tomcat:10.1-jdk17 que lo copia como ROOT.war), un docker-compose.yml y un .env.example. Servicios: db (mysql:8 con volumen nombrado db_data, init.sql montado en /docker-entrypoint-initdb.d/, healthcheck con mysqladmin ping), app (depends_on db con condition: service_healthy, variables desde .env) y adminer. Los tres en una red interna propia. Solo se exponen al host los puertos de app y adminer. Ninguna credencial hardcodeada.
+```
+**Resultado de Junie:** creó un `Dockerfile` multi-stage (compila el WAR con Maven y Java 17 y lo instala como `ROOT.war` en Tomcat 10.1), un `docker-compose.yml` con tres servicios (MySQL, aplicación y Adminer) en una red aislada, con volumen persistente, `init.sql` montado para la inicialización, healthcheck en la base de datos y `depends_on` con condición saludable, y un `.env.example` con las variables requeridas y los puertos configurables. Solo se publican los puertos de la aplicación y de Adminer.
+**Observaciones:**
+- Junie no pudo validar con `docker compose config` ni construir las imágenes porque no hay Docker en su entorno. Lo único que contrastó fue el nombre del WAR y las variables de conexión con `pom.xml` y `ConexionBD.java`.
+- La validación real la hago yo levantando el entorno en mi equipo.
+  **Cambios manuales míos:** (lo que corrijas al probarlo; si no tocas nada, escribe "ninguno")
+  **Commit:** `feat: Dockerfile multi-stage, docker-compose y .env.example`

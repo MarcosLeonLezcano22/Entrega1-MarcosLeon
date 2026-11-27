@@ -22,7 +22,7 @@ public final class ConexionBD {
 
         HikariConfig configuracion = new HikariConfig();
         configuracion.setJdbcUrl("jdbc:mysql://" + host + ":" + puerto + "/" + nombre
-                + "?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8");
+                + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8");
         configuracion.setUsername(usuario);
         configuracion.setPassword(contrasena);
         configuracion.setDriverClassName("com.mysql.cj.jdbc.Driver");

@@ -1,0 +1,55 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:?DB_NAME debe configurarse en .env}
+      MYSQL_USER: ${DB_USER:?DB_USER debe configurarse en .env}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD debe configurarse en .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD debe configurarse en .env}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/1-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$${MYSQL_ROOT_PASSWORD}\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - gamevault
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: ${DB_HOST:?DB_HOST debe configurarse en .env}
+      DB_PORT: ${DB_PORT:?DB_PORT debe configurarse en .env}
+      DB_NAME: ${DB_NAME:?DB_NAME debe configurarse en .env}
+      DB_USER: ${DB_USER:?DB_USER debe configurarse en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD debe configurarse en .env}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    networks:
+      - gamevault
+
+  adminer:
+    image: adminer
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
+    networks:
+      - gamevault
+
+volumes:
+  db_data:
+
+networks:
+  gamevault:
+    driver: bridge
+    internal: true
